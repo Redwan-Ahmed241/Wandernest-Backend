@@ -27,8 +27,30 @@ router.post('/search', async (req, res) => {
 });
 
 // Get guide details
-router.get('/:guide_id', (req, res) => {
-    res.json({ message: `Retrieve details for guide ID: ${req.params.guide_id}` });
+router.get('/:guide_id', async (req, res) => {
+    const { guide_id: rawGuideId } = req.params;
+
+    if (!rawGuideId) {
+        return res.status(400).json({ message: 'Guide ID is required' });
+    }
+
+    const guideId = isNaN(Number(rawGuideId)) ? rawGuideId : Number(rawGuideId);
+
+    const { data, error } = await supabase
+        .from('guides')
+        .select('*')
+        .eq('id', guideId)
+        .limit(1);
+
+    if (error) {
+        return res.status(500).json({ message: error.message });
+    }
+
+    if (!data || data.length === 0) {
+        return res.status(404).json({ message: 'Guide not found' });
+    }
+
+    res.json(data[0]);
 });
 
 module.exports = router;
