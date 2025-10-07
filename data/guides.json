@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "Anna Keller",
+    "description": "IFMGA-certified alpine guide specialising in multi-day traverses across the Bernese Oberland.",
+    "image": "https://example.com/images/anna-keller.jpg",
+    "price": 320,
+    "area": "Bernese Oberland",
+    "specialties": ["mountaineering", "glacier travel"],
+    "languages": ["German", "English"],
+    "experience_years": 12,
+    "rating": 4.9,
+    "availability": true,
+    "contact_info": {
+      "phone": "+41 31 555 0142",
+      "whatsapp": "+41 79 555 0142"
+    },
+    "location": {
+      "city": "Grindelwald"
+    },
+    "services_offered": ["Private guiding", "Crevasse rescue workshops", "Ski touring"],
+    "certifications": ["IFMGA", "Avalanche Pro 2"]
+  },
+  {
+    "id": 2,
+    "name": "Matteo Rossi",
+    "description": "Dolomites local with a passion for via ferrata itineraries and family-friendly day trips.",
+    "image": "https://example.com/images/matteo-rossi.jpg",
+    "price": 240,
+    "area": "Dolomites",
+    "specialties": ["via ferrata", "family tours"],
+    "languages": ["Italian", "English"],
+    "experience_years": 9,
+    "rating": 4.7,
+    "availability": false,
+    "contact_info": {
+      "phone": "+39 0462 210 987",
+      "whatsapp": "+39 340 210 9876"
+    },
+    "location": {
+      "city": "Cavalese"
+    },
+    "services_offered": ["Custom itineraries", "Sunrise hikes"],
+    "certifications": ["UIAGM"]
+  },
+  {
+    "id": "chx-aurora",
+    "name": "Aurora Lefevre",
+    "description": "Chamonix-based glacier guide focusing on introductory alpine experiences for new climbers.",
+    "image": "https://example.com/images/aurora-lefevre.jpg",
+    "price": 280,
+    "area": "Mont Blanc Massif",
+    "specialties": ["intro to alpinism", "glacier travel"],
+    "languages": ["French", "English"],
+    "experience_years": 7,
+    "rating": 4.8,
+    "availability": true,
+    "contact_info": {
+      "phone": "+33 4 50 53 54 55",
+      "whatsapp": "+33 6 45 53 54 55"
+    },
+    "location": {
+      "city": "Chamonix"
+    },
+    "services_offered": ["Glacier trekking", "Ice climbing clinics"],
+    "certifications": ["ENSA", "First Aid Wilderness"]
+  }
+]

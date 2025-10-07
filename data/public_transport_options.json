@@ -1,0 +1,35 @@
+[
+  {
+    "id": 101,
+    "from_location": "Lauterbrunnen",
+    "to_location": "Mürren",
+    "type": "cable_car",
+    "operator": "Schilthornbahn AG",
+    "duration_minutes": 12,
+    "price_chf": 22,
+    "departures": ["07:00", "08:30", "10:00", "12:00", "15:45"],
+    "notes": "Panoramic ride; included with Swiss Travel Pass."
+  },
+  {
+    "id": 102,
+    "from_location": "Zermatt",
+    "to_location": "Gornergrat",
+    "type": "rack_rail",
+    "operator": "Gornergrat Bahn",
+    "duration_minutes": 33,
+    "price_chf": 48,
+    "departures": ["06:30", "07:30", "09:00", "11:15", "14:45"],
+    "notes": "Half-fare card reductions available."
+  },
+  {
+    "id": "bus-fern-12",
+    "from_location": "Innsbruck",
+    "to_location": "Fulpmes",
+    "type": "bus",
+    "operator": "VVT",
+    "duration_minutes": 28,
+    "price_chf": 9,
+    "departures": ["06:05", "07:10", "09:20", "11:50", "17:05"],
+    "notes": "Ticket valid on Stubaitalbahn combination pass."
+  }
+]
