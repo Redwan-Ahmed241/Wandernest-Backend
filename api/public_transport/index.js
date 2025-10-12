@@ -203,15 +203,21 @@ const sortTransportOptions = (options, sortBy, sortOrder) => {
 };
 
 const fetchTransportDataset = async () => {
+    // Always try local data first for development
+    const localData = loadLocalTransportOptions();
+    if (localData && localData.length > 0) {
+        return { items: localData, source: 'local' };
+    }
+
     if (!supabase.isConfigured) {
-        return { items: loadLocalTransportOptions(), source: 'local' };
+        return { items: localData, source: 'local' };
     }
 
     const { data, error } = await supabase.from('transport_options').select('*');
 
     if (error) {
         if (shouldUseLocalFallback(error)) {
-            return { items: loadLocalTransportOptions(), source: 'local', warning: error.message };
+            return { items: localData, source: 'local', warning: error.message };
         }
 
         return { items: [], error };

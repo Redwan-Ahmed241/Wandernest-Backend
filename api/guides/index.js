@@ -250,15 +250,21 @@ const sortGuides = (guides, sortBy, sortOrder) => {
 };
 
 const fetchGuidesDataset = async () => {
+    // Always try local data first for development
+    const localData = loadLocalGuides();
+    if (localData && localData.length > 0) {
+        return { items: localData, source: 'local' };
+    }
+
     if (!supabase.isConfigured) {
-        return { items: loadLocalGuides(), source: 'local' };
+        return { items: localData, source: 'local' };
     }
 
     const { data, error } = await supabase.from('guides').select('*');
 
     if (error) {
         if (shouldUseLocalFallback(error)) {
-            return { items: loadLocalGuides(), source: 'local', warning: error.message };
+            return { items: localData, source: 'local', warning: error.message };
         }
 
         return { items: [], error };
