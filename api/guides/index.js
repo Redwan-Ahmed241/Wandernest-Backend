@@ -250,27 +250,18 @@ const sortGuides = (guides, sortBy, sortOrder) => {
 };
 
 const fetchGuidesDataset = async () => {
-    // Always try local data first for development
-    const localData = loadLocalGuides();
-    if (localData && localData.length > 0) {
-        return { items: localData, source: 'local' };
-    }
+    // Try Supabase first if configured
+    if (supabase.isConfigured) {
+        const { data, error } = await supabase.from('guides').select('*');
 
-    if (!supabase.isConfigured) {
-        return { items: localData, source: 'local' };
-    }
-
-    const { data, error } = await supabase.from('guides').select('*');
-
-    if (error) {
-        if (shouldUseLocalFallback(error)) {
-            return { items: localData, source: 'local', warning: error.message };
+        if (!error && data && data.length > 0) {
+            return { items: data, source: 'supabase' };
         }
-
-        return { items: [], error };
     }
 
-    return { items: Array.isArray(data) ? data : [], source: 'supabase' };
+    // Fallback to local data if Supabase fails or isn't configured
+    const localData = loadLocalGuides();
+    return { items: localData, source: 'local' };
 };
 
 const getNormalizedGuides = async () => {
