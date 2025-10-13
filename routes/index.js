@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const guidesRouter = require('../api/guides');
+const guidePackagesRouter = require('../api/guides/packages');
+router.use('/guides-packages', guidePackagesRouter);
 const { transportRouter, transportPackagesRouter } = require('../api/public_transport');
 
 // Example route
