@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const guidesRouter = require('../api/guides');
-const guidePackagesRouter = require('../api/guides/packages');
-const { transportRouter, transportPackagesRouter } = require('../api/public_transport');
+const guidesRouter = require('../handlers/guides');
+const guidePackagesRouter = require('../handlers/guides/packages');
+const { transportRouter, transportPackagesRouter } = require('../handlers/public_transport');
 
 // Example route
 router.get('/', (req, res) => {

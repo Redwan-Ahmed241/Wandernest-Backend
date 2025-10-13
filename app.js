@@ -10,7 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+console.log('Loading routes...');
 const routes = require('./routes');
+console.log('Routes loaded');
 app.use('/api', routes);
 
 // Default route
@@ -19,6 +21,10 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    });
+}
+
+module.exports = app;
