@@ -896,7 +896,4 @@ guidePackagesRouter.post('/analyze-location-guides', async (req, res) => {
     }
 });
 
-module.exports = {
-    guidesRouter,
-    guidePackagesRouter,
-};
+module.exports = guidesRouter;
