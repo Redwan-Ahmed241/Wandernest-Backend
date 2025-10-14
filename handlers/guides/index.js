@@ -252,9 +252,24 @@ const sortGuides = (guides, sortBy, sortOrder) => {
 const fetchGuidesDataset = async () => {
     // Try Supabase first if configured
     if (supabase.isConfigured) {
-        const { data, error } = await supabase
-            .from('guides')
-            .select('*, destination:destinations(*)');
+        // Try with destination FK join first
+        let query = supabase.from('guides').select('*');
+        let data, error;
+
+        try {
+            // Attempt join with destinations if FK exists
+            const result = await supabase
+                .from('guides')
+                .select('*, destination:destinations(*)');
+            data = result.data;
+            error = result.error;
+        } catch (joinError) {
+            // Fallback to simple select if FK doesn't exist
+            console.warn('[Guides] Destination FK not found, using embedded location data:', joinError.message);
+            const result = await supabase.from('guides').select('*');
+            data = result.data;
+            error = result.error;
+        }
 
         if (!error && data && data.length > 0) {
             return { items: data, source: 'supabase' };

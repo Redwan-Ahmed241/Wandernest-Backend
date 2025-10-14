@@ -213,9 +213,22 @@ const fetchTransportDataset = async () => {
         return { items: localData, source: 'local' };
     }
 
-    const { data, error } = await supabase
-        .from('transport_options')
-        .select('*, from_destination:destinations!from_destination_id(*), to_destination:destinations!to_destination_id(*)');
+    let data, error;
+
+    try {
+        // Attempt join with destinations if FKs exist
+        const result = await supabase
+            .from('transport_options')
+            .select('*, from_destination:destinations!from_destination_id(*), to_destination:destinations!to_destination_id(*)');
+        data = result.data;
+        error = result.error;
+    } catch (joinError) {
+        // Fallback to simple select if FKs don't exist
+        console.warn('[Transport] Destination FKs not found, using embedded location data:', joinError.message);
+        const result = await supabase.from('transport_options').select('*');
+        data = result.data;
+        error = result.error;
+    }
 
     if (error) {
         if (shouldUseLocalFallback(error)) {
