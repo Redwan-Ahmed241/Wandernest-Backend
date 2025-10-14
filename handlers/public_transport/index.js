@@ -219,7 +219,7 @@ const fetchTransportDataset = async () => {
         // Attempt join with destinations if FK exists
         const result = await supabase
             .from('transport_options')
-            .select('*, to_destination:destinations!to_destination_id(*)');
+            .select('*, to_destination:home_destination!to_destination_id(*)');
         data = result.data;
         error = result.error;
     } catch (joinError) {

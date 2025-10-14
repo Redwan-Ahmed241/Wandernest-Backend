@@ -252,27 +252,32 @@ const sortGuides = (guides, sortBy, sortOrder) => {
 const fetchGuidesDataset = async () => {
     // Try Supabase first if configured
     if (supabase.isConfigured) {
-        // Try with destination FK join first
-        let query = supabase.from('guides').select('*');
-        let data, error;
-
         try {
-            // Attempt join with destinations if FK exists
-            const result = await supabase
-                .from('guides')
-                .select('*, destination:destinations(*)');
-            data = result.data;
-            error = result.error;
-        } catch (joinError) {
-            // Fallback to simple select if FK doesn't exist
-            console.warn('[Guides] Destination FK not found, using embedded location data:', joinError.message);
-            const result = await supabase.from('guides').select('*');
-            data = result.data;
-            error = result.error;
-        }
+            // Fetch guides and destinations separately
+            const [guidesResult, destinationsResult] = await Promise.all([
+                supabase.from('guides').select('*'),
+                supabase.from('home_destination').select('*')
+            ]);
 
-        if (!error && data && data.length > 0) {
-            return { items: data, source: 'supabase' };
+            if (guidesResult.error || destinationsResult.error) {
+                throw new Error(`Database error: ${guidesResult.error?.message || destinationsResult.error?.message}`);
+            }
+
+            // Create a map of destinations by name for quick lookup
+            const destinationsByName = new Map();
+            destinationsResult.data.forEach(dest => {
+                destinationsByName.set(dest.name, dest);
+            });
+
+            // Match guides to destinations by location = destination.name
+            const guidesWithDestinations = guidesResult.data.map(guide => ({
+                ...guide,
+                destination: destinationsByName.get(guide.location) || null
+            }));
+
+            return { items: guidesWithDestinations, source: 'supabase' };
+        } catch (error) {
+            console.warn('[Guides] Failed to fetch from Supabase:', error.message);
         }
     }
 
