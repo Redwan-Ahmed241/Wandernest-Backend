@@ -19,15 +19,9 @@ const DEFAULT_GUIDE = Object.freeze({
         email: null,
         whatsapp: null,
     },
-    location: {
-        city: null,
-        region: null,
-        country: null,
-        coordinates: {
-            latitude: null,
-            longitude: null,
-        },
-    },
+    location: "",
+
+
     services_offered: [],
     certifications: [],
     schedule: {
@@ -114,32 +108,17 @@ const normalizeGuide = (record = {}) => {
         ...contactInfo,
     };
 
-    // Handle location - either embedded or from destination FK
-    let location = {};
-    if (typeof record.location === 'object' && record.location !== null) {
-        location = { ...record.location };
+    // Handle location - either embedded string or from destination FK
+    let location = "";
+    if (typeof record.location === 'string' && record.location.trim() !== '') {
+        location = record.location.trim();
     } else if (typeof record.destination === 'object' && record.destination !== null) {
-        // Use destination data for location
-        location = {
-            city: record.destination.city,
-            region: record.destination.region,
-            country: record.destination.country,
-            coordinates: record.destination.coordinates,
-        };
+        // Use destination name for location
+        location = record.destination.name || "";
     }
 
-    normalized.location = {
-        ...normalized.location,
-        ...location,
-    };
-
-    if (location.coordinates) {
-        const coordinates = location.coordinates;
-        normalized.location.coordinates = {
-            ...normalized.location.coordinates,
-            ...coordinates,
-        };
-    }
+    // Set location as string
+    normalized.location = location;
 
     const schedule = typeof record.schedule === 'object' && record.schedule !== null ? record.schedule : {};
     normalized.schedule = {
