@@ -10,9 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-console.log('Loading routes...');
 const routes = require('./routes');
-console.log('Routes loaded');
 app.use('/api', routes);
 
 // Default route

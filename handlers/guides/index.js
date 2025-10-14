@@ -252,7 +252,9 @@ const sortGuides = (guides, sortBy, sortOrder) => {
 const fetchGuidesDataset = async () => {
     // Try Supabase first if configured
     if (supabase.isConfigured) {
-        const { data, error } = await supabase.from('guides').select('*');
+        const { data, error } = await supabase
+            .from('guides')
+            .select('*, destination:destinations(*)');
 
         if (!error && data && data.length > 0) {
             return { items: data, source: 'supabase' };

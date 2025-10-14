@@ -213,7 +213,9 @@ const fetchTransportDataset = async () => {
         return { items: localData, source: 'local' };
     }
 
-    const { data, error } = await supabase.from('transport_options').select('*');
+    const { data, error } = await supabase
+        .from('transport_options')
+        .select('*, from_destination:destinations!from_destination_id(*), to_destination:destinations!to_destination_id(*)');
 
     if (error) {
         if (shouldUseLocalFallback(error)) {

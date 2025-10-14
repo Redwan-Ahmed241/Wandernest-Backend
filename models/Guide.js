@@ -114,7 +114,20 @@ const normalizeGuide = (record = {}) => {
         ...contactInfo,
     };
 
-    const location = typeof record.location === 'object' && record.location !== null ? record.location : {};
+    // Handle location - either embedded or from destination FK
+    let location = {};
+    if (typeof record.location === 'object' && record.location !== null) {
+        location = { ...record.location };
+    } else if (typeof record.destination === 'object' && record.destination !== null) {
+        // Use destination data for location
+        location = {
+            city: record.destination.city,
+            region: record.destination.region,
+            country: record.destination.country,
+            coordinates: record.destination.coordinates,
+        };
+    }
+
     normalized.location = {
         ...normalized.location,
         ...location,

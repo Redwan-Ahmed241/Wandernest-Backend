@@ -79,6 +79,15 @@ const normalizeTransportOption = (record = {}) => {
         }
     }
 
+    // Handle destination FKs
+    if (normalized.from_location === null && record.from_destination) {
+        normalized.from_location = record.from_destination.city || record.from_destination.name;
+    }
+
+    if (normalized.to_location === null && record.to_destination) {
+        normalized.to_location = record.to_destination.city || record.to_destination.name;
+    }
+
     if ((record.id === undefined || record.id === null) && record.transport_id !== undefined) {
         normalized.id = record.transport_id;
     }
