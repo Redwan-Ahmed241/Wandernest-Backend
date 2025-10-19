@@ -1,16 +1,26 @@
-const mongoose = require('mongoose');
+const { createClient } = require('@supabase/supabase-js');
 
-const connectDB = async () => {
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY; // Use service key for backend
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing Supabase credentials in environment variables');
+    process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Test connection
+async function testConnection() {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        const { data, error } = await supabase.from('users').select('count', { count: 'exact', head: true });
+        if (error) throw error;
+        console.log('✅ Supabase connection successful');
+        return true;
     } catch (error) {
-        console.error(`Error: ${error.message}`);
-        process.exit(1);
+        console.error('❌ Supabase connection failed:', error.message);
+        return false;
     }
-};
+}
 
-module.exports = connectDB;
+module.exports = { supabase, testConnection };

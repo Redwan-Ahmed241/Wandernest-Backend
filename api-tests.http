@@ -1,0 +1,144 @@
+# WanderNest Booking System - API Tests
+# Use this file with VS Code REST Client extension or copy to Postman
+
+@baseUrl = http://localhost:5000/api
+@token = YOUR_TOKEN_HERE
+
+### Health Check
+GET {{baseUrl}}
+
+### ============================================
+### AUTHENTICATION
+### ============================================
+
+### Register New User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone": "+8801234567890"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+
+### Get Profile (Protected)
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer {{token}}
+
+### ============================================
+### BROWSE AVAILABLE ITEMS (Public)
+### ============================================
+
+### Get All Packages
+GET {{baseUrl}}/packages
+
+### Get Package by ID
+GET {{baseUrl}}/packages/1
+
+### Get All Hotels
+GET {{baseUrl}}/hotels
+
+### Get Hotel by ID
+GET {{baseUrl}}/hotels/hotel_001
+
+### Get All Flights
+GET {{baseUrl}}/flights
+
+### Get Flight by ID
+GET {{baseUrl}}/flights/flight_001
+
+### ============================================
+### BOOKINGS (Protected - Requires Token)
+### ============================================
+
+### Book a Package
+POST {{baseUrl}}/bookings/package
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "package_id": 1,
+  "start_date": "2025-11-10",
+  "end_date": "2025-11-15",
+  "travelers": 2
+}
+
+### Book a Hotel
+POST {{baseUrl}}/bookings/hotel
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "hotel_id": "hotel_001",
+  "check_in_date": "2025-11-05",
+  "check_out_date": "2025-11-08",
+  "rooms": 1,
+  "guests": 2
+}
+
+### Book a Flight
+POST {{baseUrl}}/bookings/flight
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "flight_id": "flight_001",
+  "departure_time": "2026-01-15T08:00:00Z",
+  "arrival_time": "2026-01-15T12:30:00Z",
+  "passengers": 2
+}
+
+### Get My Package Bookings
+GET {{baseUrl}}/bookings?type=package
+Authorization: Bearer {{token}}
+
+### Get My Hotel Bookings
+GET {{baseUrl}}/bookings?type=hotel
+Authorization: Bearer {{token}}
+
+### Get My Flight Bookings
+GET {{baseUrl}}/bookings?type=flight
+Authorization: Bearer {{token}}
+
+### Get Specific Package Booking
+GET {{baseUrl}}/bookings/package/550e8400-e29b-41d4-a716-446655440000
+Authorization: Bearer {{token}}
+
+### Get Specific Hotel Booking
+GET {{baseUrl}}/bookings/hotel/660e8400-e29b-41d4-a716-446655440000
+Authorization: Bearer {{token}}
+
+### Get Specific Flight Booking
+GET {{baseUrl}}/bookings/flight/770e8400-e29b-41d4-a716-446655440000
+Authorization: Bearer {{token}}
+
+### Cancel Package Booking
+DELETE {{baseUrl}}/bookings/550e8400-e29b-41d4-a716-446655440000?type=package
+Authorization: Bearer {{token}}
+
+### Cancel Hotel Booking
+DELETE {{baseUrl}}/bookings/660e8400-e29b-41d4-a716-446655440000?type=hotel
+Authorization: Bearer {{token}}
+
+### Cancel Flight Booking
+DELETE {{baseUrl}}/bookings/770e8400-e29b-41d4-a716-446655440000?type=flight
+Authorization: Bearer {{token}}
+
+### ============================================
+### DASHBOARD (Protected)
+### ============================================
+
+### Get Dashboard Statistics
+GET {{baseUrl}}/dashboard/stats
+Authorization: Bearer {{token}}
