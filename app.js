@@ -47,6 +47,18 @@ app.get('/test', (req, res) => {
     res.json({ success: true, message: 'Server is working' });
 });
 
+// Health check endpoint for Vercel
+app.get('/health', (req, res) => {
+    const { supabase } = require('./config/db');
+    res.json({
+        success: true,
+        status: 'healthy',
+        environment: process.env.NODE_ENV || 'development',
+        supabaseConfigured: !!supabase,
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Start the server
 if (require.main === module) {
     console.log('Starting server...');
