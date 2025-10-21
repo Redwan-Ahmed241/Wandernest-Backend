@@ -6,7 +6,31 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+// Configure CORS using environment variables
+const allowAll = String(process.env.ALLOW_ALL_ORIGINS || 'false').toLowerCase() === 'true';
+const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || 'http://localhost:1241,http://localhost:3000';
+const allowedOrigins = allowedOriginsEnv.split(',').map(s => s.trim()).filter(Boolean);
+
+if (allowAll) {
+    app.use(cors());
+    console.log('CORS: allowing all origins (ALLOW_ALL_ORIGINS=true)');
+} else {
+    app.use(cors({
+        origin: (origin, callback) => {
+            // Allow requests with no origin (like mobile apps or curl)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.indexOf(origin) !== -1) {
+                return callback(null, true);
+            }
+            const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+            return callback(new Error(msg), false);
+        },
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        credentials: true
+    }));
+    console.log('CORS: allowed origins =>', allowedOrigins);
+}
+
 app.use(express.json());
 
 // Routes
